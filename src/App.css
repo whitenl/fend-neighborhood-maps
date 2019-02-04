@@ -8,18 +8,37 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  /*background-color: #282c34;
+  /*min-height: 100vh;*/
+  /*height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: white;*/
+
+  background-color: white;
+  min-height: 7vh;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: brown;
+  font-weight: bold;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+#map {
+  height: 100vh;
+  }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 @keyframes App-logo-spin {
