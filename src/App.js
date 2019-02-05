@@ -4,6 +4,9 @@ import Header from './components/Header.js';
 import axios from 'axios';
 import SideBar from './components/SideBar.js';
 
+// Get your own API key here: https://developers.google.com/maps/documentation/javascript/get-api-key
+const GOOGLE_API_KEY = 'AIzaSyAU-bKT2OZQ1dZs8sSodR9EE1y3pLIgLKA'  
+
 class App extends Component {
 
   constructor(props) {
@@ -18,7 +21,7 @@ class App extends Component {
   }
 
   renderMap = () => {
-    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAU-bKT2OZQ1dZs8sSodR9EE1y3pLIgLKA&callback=initMap")
+    loadScript(`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&callback=initMap`)
     window.initMap = this.initMap
   }
 
