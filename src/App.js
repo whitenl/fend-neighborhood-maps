@@ -22,12 +22,13 @@ class App extends Component {
       center: {lat: 47.5500832, lng: -122.3177821},  
       zoom: 16,
       venues: [],
-      displayVenues: []
+      displayVenues: [],
+      markers: [],
     }
   }
 
   componentDidMount() {
-    this.renderMap();
+    //this.renderMap();
     this.getVenues();
   }
 
@@ -45,7 +46,47 @@ class App extends Component {
       zoom: this.state.zoom
       }
     )
+
+  var infowindow = new window.google.maps.InfoWindow()
+  
+  this.infowindow = infowindow
+
+    this.state.venues.map(myVenue => {
+
+      const contentString = `<b>${myVenue.venue.name}</b>
+      <p><i>*Data provided by Foursquare.</i></p>`
+    
+      //Create maps markers https://developers.google.com/maps/documentation/javascript/markers
+
+      const marker = new window.google.maps.Marker({
+        position: {lat: myVenue.venue.location.lat , lng: myVenue.venue.location.lng},
+        map: map,
+        title: myVenue.venue.name,
+        animation: window.google.maps.Animation.DROP
+        
+        })
+      
+        this.state.markers.push(marker)
+         
+      // Active marker bounce animation
+      function animationEffect() {
+        marker.setAnimation(window.google.maps.Animation.BOUNCE)
+        setTimeout(function(){ marker.setAnimation(null) }, 1500)
+      }
+
+      function openMarker() {
+        infowindow.setContent(contentString)
+        animationEffect()
+        infowindow.open(map, marker)  // Open InfoWindow when marker is clicked
+      }
+
+      marker.addListener('click', function() {
+        openMarker()
+      })
+     }
+  )
   }
+
 
   /* 
   * Foursquare endpoint for location details and parameters 
@@ -74,7 +115,7 @@ class App extends Component {
       this.setState({
         venues: response.data.response.groups[0].items,
         displayVenues: response.data.response.groups[0].items,
-      },)
+      },this.renderMap())
     })
     .catch(error => {
       alert(`ERROR: Unable to fetch data from Foursquare`)
