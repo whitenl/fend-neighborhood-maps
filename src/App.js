@@ -13,17 +13,24 @@ class App extends Component {
       zoom: 16,
   }}
 
+  componentDidMount() {
+    this.renderMap()
+  }
+
   renderMap = () => {
     loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAU-bKT2OZQ1dZs8sSodR9EE1y3pLIgLKA&callback=initMap")
-    window.initMap = this.initMap;
+    window.initMap = this.initMap
   }
 
   // Creates map centered on Georgetown neightborhood in Seattle with zoom set in state
   initMap = () => {
-    var map = new window.google.maps.Map(document.getElementById('map'), 
+    var map = new window.google.maps.Map
+    (document.getElementById('map'), 
     {
-      center: this.state.center,
-      zoom: this.state.zoom
+      //center: this.state.center,
+      //zoom: this.state.zoom
+      center: {lat: 47.5500832, lng: -122.3177821},
+      zoom: 16,
     })
   }
 
@@ -47,5 +54,6 @@ function loadScript(url) {
   index.parentNode.insertBefore(script, index)
 
 }
+
 
 export default App;
