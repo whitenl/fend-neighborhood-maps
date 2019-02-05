@@ -39,8 +39,11 @@
 
 /* General sidebar styles */
 .bm-menu {
-  background: rgb(241, 241, 241);
-  font-size: 1.1em;
+  /*background: rgb(241, 241, 241);*/
+  font-size: 1.15em;
+  background: palegoldenrod;
+  padding: 1em 1em 0;
+  overflow-y: hidden !important;
 }
 
 
