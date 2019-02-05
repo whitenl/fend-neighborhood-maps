@@ -58,7 +58,7 @@ class App extends Component {
 
       const contentString = `<b>${myVenue.venue.name}</b>
       </br>${myVenue.venue.location.address}
-      <p><i>*Data provided by Foursquare.</i></p>`
+      <div class=fs-disclaimer>*Data provided by Foursquare.</div>`
     
       //Create maps markers https://developers.google.com/maps/documentation/javascript/markers
 
