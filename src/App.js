@@ -3,6 +3,7 @@ import './App.css';
 import Header from './components/Header.js';
 import axios from 'axios';
 import SideBar from './components/SideBar.js';
+import escapeRegExp from 'escape-string-regexp';
 
 // Get your own API key here: https://developers.google.com/maps/documentation/javascript/get-api-key
 const GOOGLE_API_KEY = 'AIzaSyAU-bKT2OZQ1dZs8sSodR9EE1y3pLIgLKA'  
@@ -19,11 +20,13 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      center: {lat: 47.5500832, lng: -122.3177821},  
+      center: {lat: 47.5500832, lng: -122.3177821}, //This should be the same as FS_LL lat lng
       zoom: 16,
       venues: [],
       displayVenues: [],
       markers: [],
+      query: '',
+      markersNotDisplayed: [],
     }
   }
 
@@ -32,7 +35,7 @@ class App extends Component {
     this.getVenues();
   }
 
-  // renderMap Loads google maps script and initializes map 
+  // renderMap loads google maps script and initializes map 
 
   renderMap = () => {
     loadScript(`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&callback=initMap`)
@@ -54,6 +57,7 @@ class App extends Component {
     this.state.venues.map(myVenue => {
 
       const contentString = `<b>${myVenue.venue.name}</b>
+      </br>${myVenue.venue.location.address}
       <p><i>*Data provided by Foursquare.</i></p>`
     
       //Create maps markers https://developers.google.com/maps/documentation/javascript/markers
@@ -80,6 +84,7 @@ class App extends Component {
         infowindow.open(map, marker)  // Open InfoWindow when marker is clicked
       }
 
+      // Listener for marker click 
       marker.addListener('click', function() {
         openMarker()
       })
@@ -123,11 +128,48 @@ class App extends Component {
     })
   }
 
+  updateQuery = query => {
+    this.setState({ query })
+    this.state.markers.map(marker => marker.setVisible(true))
+    let filteredVenues
+    let markersNotDisplayed
+
+    if (query) {
+      const match = new RegExp(escapeRegExp(query), "i")
+      filteredVenues = this.state.venues.filter(myVenue =>
+        match.test(myVenue.venue.name)
+      )
+      this.setState({ venues: filteredVenues })
+      markersNotDisplayed = this.state.markers.filter(marker =>
+        filteredVenues.every(myVenue => myVenue.venue.name !== marker.title)
+      )
+
+      markersNotDisplayed.forEach(marker => marker.setVisible(false))
+
+      this.setState({ markersNotDisplayed })
+    } else {
+      this.setState({ venues: this.state.displayVenues })
+      this.state.markers.forEach(marker => marker.setVisible(true))
+    }
+
+  }
+  
+
   render() {
     return (
       <div className="App">
         <Header className="App-header"/>
-        <SideBar/>
+        <SideBar 
+            id="menuContainer"
+            aria-label="Menu Container"
+            venues={this.state.venues}
+            markers={this.state.markers}
+            displayVenues={this.state.displayVenues}  
+            filteredVenues={this.filteredVenues}
+            query={this.state.query}          
+            updateQuery={q => this.updateQuery(q)}
+        />
+
         <div id="map" aria-label="Map"></div>
       </div>
     );
