@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import './App.css';
-import Header from './components/Header.js';
-import axios from 'axios';
-import SideBar from './components/SideBar.js';
-import escapeRegExp from 'escape-string-regexp';
+import React, { Component } from "react";
+import "./App.css";
+import Header from "./components/Header.js";
+import axios from "axios";
+import SideBar from "./components/SideBar.js";
+import escapeRegExp from "escape-string-regexp";
 
 // Get your own API key here: https://developers.google.com/maps/documentation/javascript/get-api-key
-const GOOGLE_API_KEY = 'AIzaSyAU-bKT2OZQ1dZs8sSodR9EE1y3pLIgLKA'  
+const GOOGLE_API_KEY = "AIzaSyAU-bKT2OZQ1dZs8sSodR9EE1y3pLIgLKA";
 
-// Foursquare parameters 
+// Foursquare parameters
 const FS_CLIENT_ID = "GQAHMGBZEJXYAQ3F3XOSN3K2WY5NBF2JLAG00MBIJNGWLF4P";
 const FS_CLIENT_SECRET = "OAC0NNZMJLQQUR1BPGGWZUPXIL13F3ZVBPLHTV2ILIR2V2YQ";
 const FS_QUERY = "coffee";
@@ -16,18 +16,17 @@ const FS_LL = "47.5500832,-122.3177821";
 const FS_V = "20190204";
 
 class App extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      center: {lat: 47.5500832, lng: -122.3177821}, //This should be the same as FS_LL lat lng
+      center: { lat: 47.5500832, lng: -122.3177821 }, //This should be the same as FS_LL lat lng
       zoom: 16,
       venues: [],
       displayVenues: [],
       markers: [],
-      query: '',
-      markersNotDisplayed: [],
-    }
+      query: "",
+      markersNotDisplayed: []
+    };
   }
 
   componentDidMount() {
@@ -35,71 +34,73 @@ class App extends Component {
     this.getVenues();
   }
 
-  // renderMap loads google maps script and initializes map 
+  // renderMap loads google maps script and initializes map
 
   renderMap = () => {
-    loadScript(`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&callback=initMap`)
-    window.initMap = this.initMap
-  }
+    loadScript(
+      `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&callback=initMap`
+    );
+    window.initMap = this.initMap;
+  };
 
-  // Creates map centered on Georgetown neightborhood in Seattle 
+  // Creates map centered on Georgetown neightborhood in Seattle
   initMap = () => {
-    const map = new window.google.maps.Map(document.getElementById('map'), {
+    const map = new window.google.maps.Map(document.getElementById("map"), {
       center: this.state.center,
       zoom: this.state.zoom
-      }
-    )
+    });
 
-  var infowindow = new window.google.maps.InfoWindow()
-  
-  this.infowindow = infowindow
+    var infowindow = new window.google.maps.InfoWindow();
+
+    this.infowindow = infowindow;
 
     this.state.venues.map(myVenue => {
-
       const contentString = `<b>${myVenue.venue.name}</b>
       </br>${myVenue.venue.location.address}
-      <div class=fs-disclaimer>*Data provided by Foursquare.</div>`
-    
+      <div class=fs-disclaimer>*Data provided by Foursquare.</div>`;
+
       //Create maps markers https://developers.google.com/maps/documentation/javascript/markers
 
       const marker = new window.google.maps.Marker({
-        position: {lat: myVenue.venue.location.lat , lng: myVenue.venue.location.lng},
+        position: {
+          lat: myVenue.venue.location.lat,
+          lng: myVenue.venue.location.lng
+        },
         map: map,
         title: myVenue.venue.name,
         animation: window.google.maps.Animation.DROP
-        
-        })
-      
-        this.state.markers.push(marker)
-         
+      });
+
+      this.state.markers.push(marker);
+
       // Active marker bounce animation
       function animationEffect() {
-        marker.setAnimation(window.google.maps.Animation.BOUNCE)
-        setTimeout(function(){ marker.setAnimation(null) }, 1500)
+        marker.setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+          marker.setAnimation(null);
+        }, 1500);
       }
 
       function openMarker() {
-        infowindow.setContent(contentString)
-        animationEffect()
-        infowindow.open(map, marker)  // Open InfoWindow when marker is clicked
+        infowindow.setContent(contentString);
+        animationEffect();
+        infowindow.open(map, marker); // Open InfoWindow when marker is clicked
       }
 
-      // Listener for marker click 
-      marker.addListener('click', function() {
-        openMarker()
-      })
-     }
-  )
-  }
+      // Listener for marker click
+      marker.addListener("click", function() {
+        openMarker();
+      });
+    });
+  };
 
-
-  /* 
-  * Foursquare endpoint for location details and parameters 
-  * For more details visit https://developer.foursquare.com/docs/api/venues/explore   
-  */
+  /*
+   * Foursquare endpoint for location details and parameters
+   * For more details visit https://developer.foursquare.com/docs/api/venues/explore
+   */
 
   getVenues = () => {
-    const endPoint = "https://api.foursquare.com/v2/venues/explore?"
+    const endPoint = "https://api.foursquare.com/v2/venues/explore?";
     const parameters = {
       client_id: `${FS_CLIENT_ID}`,
       client_secret: `${FS_CLIENT_SECRET}`,
@@ -107,84 +108,84 @@ class App extends Component {
       ll: `${FS_LL}`,
       v: `${FS_V}`,
       radius: 500
-    }
+    };
 
-  /*
-  * uses endpoint generated by getVenues to fetch location data 
-  * For more details on axios visit https://github.com/axios/axios
-  */
+    /*
+     * uses endpoint generated by getVenues to fetch location data
+     * For more details on axios visit https://github.com/axios/axios
+     */
 
-  axios.get(endPoint + new URLSearchParams(parameters))
-    .then(response => {
-      console.log(response.data.response.groups[0].items)
-      this.setState({
-        venues: response.data.response.groups[0].items,
-        displayVenues: response.data.response.groups[0].items,
-      },this.renderMap())
-    })
-    .catch(error => {
-      alert(`ERROR: Unable to fetch data from Foursquare`)
-      console.log("ERROR: " + error)
-    })
-  }
+    axios
+      .get(endPoint + new URLSearchParams(parameters))
+      .then(response => {
+        console.log(response.data.response.groups[0].items);
+        this.setState(
+          {
+            venues: response.data.response.groups[0].items,
+            displayVenues: response.data.response.groups[0].items
+          },
+          this.renderMap()
+        );
+      })
+      .catch(error => {
+        alert(`ERROR: Unable to fetch data from Foursquare`);
+        console.log("ERROR: " + error);
+      });
+  };
 
   updateQuery = query => {
-    this.setState({ query })
-    this.state.markers.map(marker => marker.setVisible(true))
-    let filteredVenues
-    let markersNotDisplayed
+    this.setState({ query });
+    this.state.markers.map(marker => marker.setVisible(true));
+    let filteredVenues;
+    let markersNotDisplayed;
 
     if (query) {
-      const match = new RegExp(escapeRegExp(query), "i")
+      const match = new RegExp(escapeRegExp(query), "i");
       filteredVenues = this.state.venues.filter(myVenue =>
         match.test(myVenue.venue.name)
-      )
-      this.setState({ venues: filteredVenues })
+      );
+      this.setState({ venues: filteredVenues });
       markersNotDisplayed = this.state.markers.filter(marker =>
         filteredVenues.every(myVenue => myVenue.venue.name !== marker.title)
-      )
+      );
 
-      markersNotDisplayed.forEach(marker => marker.setVisible(false))
+      markersNotDisplayed.forEach(marker => marker.setVisible(false));
 
-      this.setState({ markersNotDisplayed })
+      this.setState({ markersNotDisplayed });
     } else {
-      this.setState({ venues: this.state.displayVenues })
-      this.state.markers.forEach(marker => marker.setVisible(true))
+      this.setState({ venues: this.state.displayVenues });
+      this.state.markers.forEach(marker => marker.setVisible(true));
     }
-
-  }
-  
+  };
 
   render() {
     return (
       <div className="App">
-        <Header className="App-header"/>
-        <SideBar 
-            id="menuContainer"
-            aria-label="Menu Container"
-            venues={this.state.venues}
-            markers={this.state.markers}
-            displayVenues={this.state.displayVenues}  
-            filteredVenues={this.filteredVenues}
-            query={this.state.query}          
-            updateQuery={q => this.updateQuery(q)}
+        <Header className="App-header" />
+        <SideBar
+          id="menuContainer"
+          aria-label="Menu Container"
+          venues={this.state.venues}
+          markers={this.state.markers}
+          displayVenues={this.state.displayVenues}
+          filteredVenues={this.filteredVenues}
+          query={this.state.query}
+          updateQuery={q => this.updateQuery(q)}
         />
 
-        <div id="map" aria-label="Map"></div>
+        <div id="map" aria-label="Map" />
       </div>
     );
   }
 }
 
 function loadScript(url) {
-  var index = window.document.getElementsByTagName("script")[0]
-  var script = window.document.createElement("script")
-  script.src = url
-  script.async = true
-  script.defer = true
-  index.parentNode.insertBefore(script, index)
-
+  var index = window.document.getElementsByTagName("script")[0];
+  var script = window.document.createElement("script");
+  script.src = url;
+  script.async = true;
+  script.defer = true;
+  index.parentNode.insertBefore(script, index);
 }
-
 
 export default App;
