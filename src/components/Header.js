@@ -1,14 +1,8 @@
-import React, { Component } from 'react';
-
+import React, { Component } from "react";
 
 class Header extends Component {
   render() {
-    return (
-      <h1
-      className="App-header">
-      Coffee in Georgetown
-      </h1>
-    );
+    return <h1 className="App-header">Coffee in Georgetown</h1>;
   }
 }
 
