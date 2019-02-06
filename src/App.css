@@ -22,9 +22,11 @@
   min-height: 7vh;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 3vmin);
   color: brown;
   font-weight: bold;
+  margin-top: 30px;
+  margin-left: 25%;
 }
 
 .App-link {
@@ -35,6 +37,7 @@
   padding-top: 10px;
   font-size: .75em;
   font-style: italic; 
+  font-weight: bolder;
 }
 
 .Map {
@@ -43,6 +46,12 @@
 
 #map {
   height: 100vh;
+}
+
+.venue-title {
+  color: brown;
+  font-weight: bold;
+  padding-bottom: 5px;
 }
 
 html, body {
