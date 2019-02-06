@@ -22,7 +22,7 @@
   min-height: 7vh;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 3vmin);
+  font-size: calc(10px + 4vmin);
   color: brown;
   font-weight: bold;
   margin-top: 30px;
@@ -60,11 +60,17 @@ html, body {
     padding: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media screen and (max-width: 479px) {
+  .App-header {
+    margin-left: 25%;
+    padding-left: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .venue-title {
+    padding: 5px;
+    font-size: calc(10px + 2vmin);
+
   }
 }
+
+
