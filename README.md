@@ -19,7 +19,7 @@ To run the project in the **development mode**, follow the instructions below:
 
 Download or clone the repository to your computer:
 ```
-$ git clone https://github.com/whitenl
+$ git clone https://github.com/whitenl/fend-neighborhood-maps.git
 ```
 Inside of the repository folder install project dependencies using: 
 ```
