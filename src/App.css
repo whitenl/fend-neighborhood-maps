@@ -60,17 +60,5 @@ html, body {
     padding: 0;
 }
 
-@media screen and (max-width: 479px) {
-  .App-header {
-    margin-left: 25%;
-    padding-left: 10px;
-  }
-
-  .venue-title {
-    padding: 5px;
-    font-size: calc(10px + 2vmin);
-
-  }
-}
 
 

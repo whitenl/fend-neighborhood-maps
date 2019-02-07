@@ -33,7 +33,7 @@
 
 /* Color/shape of close button cross */
 .bm-cross {
-  background: #bdc3c7;
+  background: brown;
 }
   
 
@@ -58,8 +58,8 @@
     padding: 0;
   }
   .bm-menu {
-    margin-top: 10px;
-    font-size: 0.8em;
+    /*font-size: 0.8em;*/
+    font-size: calc(10px + 2vmin);
     width: 100%;
   }
 }

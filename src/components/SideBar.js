@@ -27,19 +27,19 @@ class SideBar extends Component {
           onChange={event => this.props.updateQuery(event.target.value)}
         />
         <ol className="venue-list" aria-label="Venue List">
-          {this.props.venues.map(myVenue => (
+          {this.props.venues.map(fsVenue => (
             <li
               role="menuitem"
               className="venue-title"
-              key={myVenue.venue.id}
-              id={myVenue.venue.id}
+              key={fsVenue.venue.id}
+              id={fsVenue.venue.id}
               onClick={() => {
-                this.openMarker(myVenue.venue.name);
+                this.openMarker(fsVenue.venue.name);
               }}
-              aria-label={myVenue.venue.name}
+              aria-label={fsVenue.venue.name}
               tabIndex="0"
             >
-              {myVenue.venue.name}
+              {fsVenue.venue.name}
             </li>
           ))}
         </ol>

@@ -20,7 +20,7 @@ class App extends Component {
     super(props);
     this.state = {
       center: { lat: 47.5500832, lng: -122.3177821 }, //This should be the same as FS_LL lat lng
-      zoom: 16,
+      zoom: 15,
       venues: [],
       displayVenues: [],
       markers: [],
@@ -30,7 +30,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    //this.renderMap();
+    //this.renderMap(); //calling renderMap in getVenues. Venues list needed to generate markers
     this.getVenues();
   }
 
@@ -54,20 +54,22 @@ class App extends Component {
 
     this.infowindow = infowindow;
 
-    this.state.venues.map(myVenue => {
-      const contentString = `<b>${myVenue.venue.name}</b>
-      </br>${myVenue.venue.location.address}
+    this.state.venues.map(fsVenue => {
+
+      //content for infowindow
+      const contentString = `<b>${fsVenue.venue.name}</b>
+      </br>${fsVenue.venue.location.address}
       <div class=fs-disclaimer>*Data provided by Foursquare.</div>`;
 
       //Create maps markers https://developers.google.com/maps/documentation/javascript/markers
 
       const marker = new window.google.maps.Marker({
         position: {
-          lat: myVenue.venue.location.lat,
-          lng: myVenue.venue.location.lng
+          lat: fsVenue.venue.location.lat,
+          lng: fsVenue.venue.location.lng
         },
         map: map,
-        title: myVenue.venue.name,
+        title: fsVenue.venue.name,
         animation: window.google.maps.Animation.DROP
       });
 
@@ -133,27 +135,29 @@ class App extends Component {
       });
   };
 
+//compares query 
+
   updateQuery = query => {
-    this.setState({ query });
+    this.setState({query});
     this.state.markers.map(marker => marker.setVisible(true));
+    let hiddenMarkers;
     let filteredVenues;
-    let markersNotDisplayed;
 
     if (query) {
       const match = new RegExp(escapeRegExp(query), "i");
-      filteredVenues = this.state.venues.filter(myVenue =>
-        match.test(myVenue.venue.name)
+      filteredVenues = this.state.venues.filter(fsVenue =>
+        match.test(fsVenue.venue.name)
       );
-      this.setState({ venues: filteredVenues });
-      markersNotDisplayed = this.state.markers.filter(marker =>
-        filteredVenues.every(myVenue => myVenue.venue.name !== marker.title)
+      this.setState({venues: filteredVenues});
+      hiddenMarkers = this.state.markers.filter(marker =>
+        filteredVenues.every(fsVenue => fsVenue.venue.name !== marker.title)
       );
 
-      markersNotDisplayed.forEach(marker => marker.setVisible(false));
+      hiddenMarkers.forEach(marker => marker.setVisible(false));
 
-      this.setState({ markersNotDisplayed });
+      this.setState({hiddenMarkers});
     } else {
-      this.setState({ venues: this.state.displayVenues });
+      this.setState({venues: this.state.displayVenues});
       this.state.markers.forEach(marker => marker.setVisible(true));
     }
   };
@@ -178,6 +182,8 @@ class App extends Component {
     );
   }
 }
+
+// Reference: Add Google Maps to React App https://www.youtube.com/watch?v=W5LhLZqj76s
 
 function loadScript(url) {
   var index = window.document.getElementsByTagName("script")[0];
