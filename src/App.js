@@ -135,7 +135,7 @@ class App extends Component {
       });
   };
 
-//compares query 
+//compares user input to list of locations. Filters matches and hides non matching markers 
 
   updateQuery = query => {
     this.setState({query});
