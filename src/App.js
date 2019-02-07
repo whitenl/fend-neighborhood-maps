@@ -25,7 +25,7 @@ class App extends Component {
       displayVenues: [],
       markers: [],
       query: "",
-      markersNotDisplayed: []
+      hiddenMarkers: []
     };
   }
 
