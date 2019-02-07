@@ -8,7 +8,7 @@ import escapeRegExp from "escape-string-regexp";
 // Get your own API key here: https://developers.google.com/maps/documentation/javascript/get-api-key
 const GOOGLE_API_KEY = "AIzaSyAU-bKT2OZQ1dZs8sSodR9EE1y3pLIgLKA";
 
-// Foursquare parameters
+// Foursquare parameters - get your own ID & SECRET here: https://foursquare.com/developers/apps
 const FS_CLIENT_ID = "GQAHMGBZEJXYAQ3F3XOSN3K2WY5NBF2JLAG00MBIJNGWLF4P";
 const FS_CLIENT_SECRET = "OAC0NNZMJLQQUR1BPGGWZUPXIL13F3ZVBPLHTV2ILIR2V2YQ";
 const FS_QUERY = "coffee";
