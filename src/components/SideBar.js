@@ -26,10 +26,10 @@ class SideBar extends Component {
           value={this.props.query}
           onChange={event => this.props.updateQuery(event.target.value)}
         />
-        <ol className="venue-list" aria-label="Venue List">
+        <ol className="venue-list" aria-label="Venue List" role="list">
           {this.props.venues.map(fsVenue => (
             <li
-              role="menuitem"
+              role="listitem"
               className="venue-title"
               key={fsVenue.venue.id}
               id={fsVenue.venue.id}
